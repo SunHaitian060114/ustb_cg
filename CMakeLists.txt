@@ -1,0 +1,84 @@
+cmake_minimum_required(VERSION 3.16)
+
+project(planeWar VERSION 0.1 LANGUAGES CXX)
+
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Multimedia REQUIRED)  # 使用变量版本查找Qt Multimedia模块
+
+set(PROJECT_SOURCES
+    main.cpp
+    mainscene.cpp
+    mainscene.h
+    config.h
+
+    map.h map.cpp
+    heroplane.h heroplane.cpp
+    bullet.h bullet.cpp
+    enemyplane.h enemyplane.cpp
+    bomb.h bomb.cpp
+)
+
+if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
+    qt_add_executable(planeWar
+        MANUAL_FINALIZATION
+        ${PROJECT_SOURCES}
+        gameoverr.h gameoverr.cpp
+        score.h score.cpp
+        button.h button.cpp
+        res.qrc
+    )
+    # Define target properties for Android with Qt 6 as:
+    # set_target_properties(planeWar PROPERTIES
+    #    QT_ANDROID_PACKAGE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android
+    # )
+    # For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
+else()
+    if(ANDROID)
+        add_library(planeWar SHARED
+            ${PROJECT_SOURCES}
+        )
+        # Define properties for Android with Qt 5 after find_package() calls as:
+        # set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
+    else()
+        add_executable(planeWar
+            ${PROJECT_SOURCES}
+        )
+    endif()
+endif()
+
+target_link_libraries(planeWar PRIVATE
+    Qt${QT_VERSION_MAJOR}::Widgets
+    Qt${QT_VERSION_MAJOR}::Multimedia
+)
+
+# Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
+# If you are developing for iOS or macOS you should consider setting an
+# explicit, fixed bundle identifier manually though.
+if(${QT_VERSION} VERSION_LESS 6.1.0)
+    set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER "com.example.planeWar")
+endif()
+
+set_target_properties(planeWar PROPERTIES
+    ${BUNDLE_ID_OPTION}
+    MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
+    MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}"
+    MACOSX_BUNDLE TRUE
+    WIN32_EXECUTABLE TRUE
+)
+
+include(GNUInstallDirs)
+install(TARGETS planeWar
+    BUNDLE DESTINATION .
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
+
