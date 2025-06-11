@@ -44,4 +44,4 @@ void UserManager::loadFromFile() {
             users.emplace_back(username);
         }
     }
-}
+} 

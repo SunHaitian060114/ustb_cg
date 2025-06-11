@@ -4,20 +4,11 @@ int get_day_permonth(int month, Date A)
 {
     switch(month)
     {
-    case 1: 
-    case 3: 
-    case 5: 
-    case 7: 
-    case 8: 
-    case 10: 
-    case 12:
+    case 1: case 3: case 5: case 7: case 8: case 10: case 12:
         return 31;
         break;
-    case 4: 
-    case 6: 
-    case 9: 
-    case 11:
-        return 30;
+    case 4: case 6: case 9: case 11:
+        return 30; 
         break;
 
     case 2:
@@ -42,7 +33,7 @@ int get_day_permonth(int month, Date A)
 
 bool Date::validDate(int y, int m, int d)
 {
-    if (y < 1900 || m < 1 || m > 12 || d < 1) 
+    if (y < 1949 || m < 1 || m > 12 || d < 1) 
         return false;
 
     int maxDay = 31;

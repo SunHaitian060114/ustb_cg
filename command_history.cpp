@@ -4,21 +4,41 @@
 
 const std::string file = "commands.txt";
 
+void CommandHistoryManager::clearHistory() {
+    std::ofstream fout("commands.txt", std::ios::trunc);  // 清空内容
+    fout.close();
+}
+
 void CommandHistoryManager::saveCommand(const std::string& rawCommand) {
-    if (rawCommand.empty() || rawCommand.find("(a)add") == 0 || rawCommand.find("Total:") != std::string::npos) {
-        return;  // 防止空命令和无关的命令被保存
+    // 读取现有命令
+    std::ifstream fin(file);
+    std::string line;
+    std::vector<std::string> existingCommands;
+    
+    while (std::getline(fin, line)) {
+        existingCommands.push_back(line);
     }
 
-    // 打开文件并追加命令
-    std::ofstream fout(file, std::ios::app);
+    // 检查命令是否已存在
+    for (const auto& existingCommand : existingCommands) {
+        if (existingCommand == rawCommand) {
+            // 如果命令已存在，不再写入文件
+            // std::cout << "Command already exists, skipping save." << std::endl;
+            return;
+        }
+    }
+
+    // 如果命令不重复，写入命令到文件
+    std::ofstream fout(file, std::ios::app);  // 使用追加模式
     if (!fout) {
         std::cerr << "Error: Unable to open command history file!" << std::endl;
         throw std::runtime_error("无法写入命令历史文件");
     }
 
-    fout << rawCommand << '\n';  // 保存完整命令
+    fout << rawCommand << '\n';  // 保存新命令
     fout.close();
 }
+
 
 
 
@@ -39,23 +59,6 @@ std::vector<std::string> CommandHistoryManager::loadCommands()
     }
     return commands;
 }
-
-
-// bool CommandHistoryManager::isValidCommand(const std::string& cmd) {
-//     // 匹配图片中出现的所有命令类型
-//     static const std::regex pattern(
-//         R"(^(a\s[sc]\s\w+\s[\d.]+)|)"      // 添加账户：a s S123456 0.020
-//         R"((d\s\d+\s\d+(\s.+)?)|)"        // 存款：d 0 5000 salary
-//         R"((w\s\d+\s\d+(\s.+)?)|)"        // 取款：w 1 2000
-//         R"((c\s\d+)|(n)|(s)|(q)|(e))"     // 其他单字母命令
-//     );
-//     return std::regex_match(cmd, pattern);
-// }
-
-// void CommandHistoryManager::clearHistory() {
-//     std::ofstream fout(file, std::ios::trunc);
-//     fout.close();
-// }
 
 bool CommandHistoryManager::isValidCommand(const std::string& cmd) {
     // 更宽松的匹配模式

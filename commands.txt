@@ -14,3 +14,6 @@ d 0 5500 salary
 n
 c 15
 w 2 1500 buy a television
+
+w 0 2d 0 20000 salary0000 test
+d 0 20000 salary
