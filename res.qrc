@@ -1,0 +1,32 @@
+<RCC>
+    <qresource prefix="/">
+        <file>resource/BackGroundScene.jpg</file>
+        <file>resource/BGM_MEGALOVANIA.wav</file>
+        <file>resource/bomb-0.png</file>
+        <file>resource/bomb-1.png</file>
+        <file>resource/bomb-2.png</file>
+        <file>resource/bomb-3.png</file>
+        <file>resource/bomb-4.png</file>
+        <file>resource/bomb-5.png</file>
+        <file>resource/bomb-6.png</file>
+        <file>resource/bomb-7.png</file>
+        <file>resource/bomb-8.png</file>
+        <file>resource/bomb-9.png</file>
+        <file>resource/bomb-10.png</file>
+        <file>resource/bomb-11.png</file>
+        <file>resource/bomb-12.png</file>
+        <file>resource/bomb-13.png</file>
+        <file>resource/bomb-14.png</file>
+        <file>resource/bomb-15.png</file>
+        <file>resource/Bullet_01 (2).jpg</file>
+        <file>resource/enemy.png</file>
+        <file>resource/gameover.png</file>
+        <file>resource/MyPlane.jpg</file>
+        <file>resource/pause.png</file>
+        <file>resource/pic.png</file>
+        <file>resource/quit.png</file>
+        <file>resource/restart.png</file>
+        <file>resource/sound_bomb.wav</file>
+        <file>resource/start.png</file>
+    </qresource>
+</RCC>
