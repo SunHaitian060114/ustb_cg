@@ -8,4 +8,4 @@ passed  input:10 --- output:Buzz£¨If and only if an integer multiple of 5£©
 passed  input:15 --- output:FizzBuzz£¨It is both an integer multiple of 3 and an integer multiple of 5£©
 passed  input:18 --- output:Fizz£¨If and only if an integer multiple of 3£©
 passed  input:20 --- output:Buzz£¨If and only if an integer multiple of 5£©
-  input:30 --- output:FizzBuzz£¨It is both an integer multiple of 3 and an integer multiple of 5£©
+passed  input:30 --- output:FizzBuzz£¨It is both an integer multiple of 3 and an integer multiple of 5£©
