@@ -27,6 +27,6 @@ int main()
 	//cin >> value  >> expected >> aim;
     //cout << fizzBuzz(value) << endl;
 	//test(value, expected, aim);
-	test(18, "Fizz", 9);
+	test(20, "Buzz", 10);
     return 0;
 }
