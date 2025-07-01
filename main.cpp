@@ -22,10 +22,11 @@ void test(int input, string output, int aim)
 
 int main()
 {
-    int value, aim;
-	string expected;
-	cin >> value >> expected >> aim;
-    cout << fizzBuzz(value) << endl;
-	test(value, expected, aim);
+ //   int value, aim;
+	//string expected;
+	//cin >> value  >> expected >> aim;
+    //cout << fizzBuzz(value) << endl;
+	//test(value, expected, aim);
+	test(18, "Fizz", 9);
     return 0;
 }
