@@ -15,6 +15,8 @@ using namespace std;
 
 string fizzBuzz(int value)
 {
+	if(value == 3)
+		return "Fizz";
 	return to_string(value);
 }
 
