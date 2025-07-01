@@ -1,5 +1,5 @@
-  Can I call the fizzBuzz()?
-  input:1 --- output:1
+passed  Can I call the fizzBuzz()?
+passed  input:1 --- output:1
   input:2 --- output:2
   input:3 --- output:Fizz
   input:5 --- output:Buzz
