@@ -15,7 +15,7 @@ using namespace std;
 
 string fizzBuzz(int value)
 {
-	if(value == 3)
+	if (!(value % 3))
 		return "Fizz";
 	if (value == 5)
 		return "Buzz";
