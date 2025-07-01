@@ -2,7 +2,7 @@ passed  Can I call the fizzBuzz()?
 passed  input:1 --- output:1
 passed  input:2 --- output:2
 passed  input:3 --- output:Fizz
-  input:5 --- output:Buzz
+passed  input:5 --- output:Buzz
   input:6 --- output:Fizz£¨If and only if an integer multiple of 3£©
   input:10 --- output:Buzz£¨If and only if an integer multiple of 5£©
   input:15 --- output:FizzBuzz£¨It is both an integer multiple of 3 and an integer multiple of 5£©

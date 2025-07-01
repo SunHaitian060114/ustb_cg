@@ -25,6 +25,6 @@ int main()
     int value;
     //cin >> value;
     //cout << fizzBuzz(value) << endl;
-	test(3, "Fizz", 4);
+	test(5, "Buzz", 5);
     return 0;
 }
