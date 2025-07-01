@@ -22,11 +22,8 @@ void test(int input, string output, int aim)
 
 int main()
 {
- //   int value, aim;
-	//string expected;
-	//cin >> value  >> expected >> aim;
-    //cout << fizzBuzz(value) << endl;
-	//test(value, expected, aim);
-	test(30, "FizzBuzz", 11);
+    int value;
+	cin >> value;
+    cout << fizzBuzz(value) << endl;
     return 0;
 }
