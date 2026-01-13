@@ -15,7 +15,7 @@ using namespace std;
 
 
 class Date
-{
+{ 
     public:
     Date();
     Date(int x, int y, int z);

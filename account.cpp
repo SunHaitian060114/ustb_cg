@@ -1,4 +1,4 @@
-
+ 
 
 #include"account.h"
 #include"AccountRecord.h"
@@ -234,7 +234,6 @@ void CreditAccount::settle(Date date) {
     if (date.Get_month() == 1 && date.Get_day() == 1) {
         balance -= fee;
         total -= fee;
-
         // 同样避免输出极小值
         if (fabs(fee) >= 0.005) {
             cout << date.Get_year() << "-" << date.Get_month() << "-" << date.Get_day() 
@@ -286,23 +285,22 @@ std::string CreditAccount::getReminders() const {
     return reminders;
 }
 
+vector<AccountRecord> Account::queryByMonth(int year, int month) {
+    Date start(year, month, 1);  // 从该月的第一天开始
+    Date end = (month == 12) ? Date(year + 1, 1, 1) : Date(year, month + 1, 1); // 到下个月的第一天
 
-std::vector<AccountRecord> Account::queryByDate(const Date& month) {
-    std::vector<AccountRecord> records;
-    auto range = recordMap.equal_range(month);
-    
-    for (auto it = range.first; it != range.second; ++it) {
-        records.push_back(it->second);
+    vector<AccountRecord> records;
+    auto it_low = recordMap.lower_bound(start);  // 获取记录从该月的第一天开始
+    auto it_high = recordMap.lower_bound(end);   // 获取记录到下个月的第一天
+
+    for (; it_low != it_high; ++it_low) {
+        records.push_back(it_low->second);  // 添加符合条件的记录
     }
-    
-    // 按日期排序
-    std::sort(records.begin(), records.end(), 
-        [](const AccountRecord& a, const AccountRecord& b) {
-            return a.getDate() < b.getDate();
-        });
-    
+
     return records;
 }
+
+
 
 std::vector<AccountRecord> Account::queryByAmount(const Date& month) {
     std::vector<AccountRecord> records;

@@ -12,4 +12,4 @@ const std::vector<int>& User::getAccountIndices() const {
 
 void User::addAccount(int index) {
     accountIndices.push_back(index);
-}
+} 

@@ -19,7 +19,7 @@ c. 对变动值amount四舍五入保留两位小数
 d. 为简便起见，日期用一个整数来表示。该整数是一个以日为单位的相对日期，例如如果以开户日为1，那么开户日后的第3天就用4来表示。这样通过将两个日期相减就可以得到两个日期相差天数，在计算年利时非常方便。
 
 运行截图如下：
-
+ 
 */
 #pragma once
 #include "date.h"
@@ -34,11 +34,11 @@ class Account
    double accumulation;//利息总数
    virtual double accumulate(Date date);
    static double total;
+   static double getTotal();
    Date lastDate;//上次存款时间
    string aim;                      //xxx
    const string& getID() const;
    double getBalance();
-   static double getTotal();
    virtual void show()=0;//展示信息
    virtual void deposit(Date date, double amount, string aim0)=0;//存款
    virtual void withdraw(Date date, double amount, string aim0)=0;//取款
@@ -58,7 +58,7 @@ class Account
     virtual MonthlyStats getMonthlyStats(const Date& month) const;
     virtual std::string getReminders() const;
 
-    static std::vector<AccountRecord> queryByDate(const Date& month);
+    static  vector<AccountRecord> queryByMonth(int year, int month);
     static std::vector<AccountRecord> queryByAmount(const Date& month);
 
 };

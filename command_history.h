@@ -17,4 +17,4 @@ class CommandHistoryManager
     //命令有效性检测
     static bool isValidCommand(const std::string& cmd);
 
-};
+}; 

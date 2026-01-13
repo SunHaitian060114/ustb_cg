@@ -7,7 +7,7 @@
 
 using namespace std;
 
-void handleUserMenu();
+void handleUserMenu(); 
 
 /*commands函数*/
 std::string extractIdFromCommand(const std::string& command) {
@@ -121,7 +121,12 @@ void executeCommand(const std::string& command, Date& date, std::vector<Account*
     else if (action == "e") {
         std::cout << "Exiting program..." << std::endl;
     }
+
+    // 保存命令到文件
+    CommandHistoryManager::saveCommand(command);
 }
+
+
 
 struct deleter {
     template <class T> void operator () (T* p) { delete p; }
@@ -154,17 +159,24 @@ void handleUserMenu() {
     vector<Account*> accounts;
     
     vector<string> commands = CommandHistoryManager::loadCommands();
-    for (const auto& cmd : commands) {
-        if (CommandHistoryManager::isValidCommand(cmd)) {
-            executeCommand(cmd, date, accounts);
-        }
+for (const auto& cmd : commands) {
+    if (CommandHistoryManager::isValidCommand(cmd)) {
+        executeCommand(cmd, date, accounts);
     }
+}
+
     
     int choice;
+    bool shouldExit = false;
 do {
     showUserMenu();
-    cin >> choice;
-    cin.ignore();
+
+    if(!(cin >> choice)) { // 检查输入是否成功
+        cin.clear(); // 重置错误状态
+        cin.ignore(numeric_limits<streamsize>::max(), '\n'); // 清空缓冲区
+        cout << "Please enter a NUMBER (1 or 2)!\n";
+        continue;
+    }
     
     switch(choice) {
         case 1: {
@@ -173,12 +185,18 @@ do {
             cin >> type;
             cout << "Enter account ID: ";
             cin >> id;
-            
+
             if (type == "s") {
                 cout << "Enter annual interest rate: ";
                 double rate;
                 cin >> rate;
                 accounts.push_back(new SavingsAccount(date, id, rate));
+
+                // ✅ 保存命令
+                ostringstream oss;
+                oss << "a " << type << " " << id << " " << rate;
+                CommandHistoryManager::saveCommand(oss.str());
+
             } else if (type == "c") {
                 cout << "Enter credit limit: ";
                 double credit;
@@ -190,9 +208,16 @@ do {
                 double fee;
                 cin >> fee;
                 accounts.push_back(new CreditAccount(date, id, credit, rate, fee));
+
+                // ✅ 保存命令
+                ostringstream oss;
+                oss << "a " << type << " " << id << " " << rate << " " << credit << " " << fee;
+                CommandHistoryManager::saveCommand(oss.str());
             }
             break;
         }
+
+        
         case 2: {
             cout << "Enter account index: ";
             int index;
@@ -204,12 +229,18 @@ do {
             cout << "Enter description: ";
             string desc;
             getline(cin, desc);
-            
+
             if (index >= 0 && index < accounts.size()) {
                 accounts[index]->deposit(date, amount, desc);
+
+                // ✅ 保存命令
+                ostringstream oss;
+                oss << "d " << index << " " << amount << " " << desc;
+                CommandHistoryManager::saveCommand(oss.str());
             }
             break;
         }
+
         case 3: {
             cout << "Enter account index: ";
             int index;
@@ -221,12 +252,18 @@ do {
             cout << "Enter description: ";
             string desc;
             getline(cin, desc);
-            
+
             if (index >= 0 && index < accounts.size()) {
                 accounts[index]->withdraw(date, amount, desc);
+
+                // ✅ 保存命令
+                ostringstream oss;
+                oss << "w " << index << " " << amount << " " << desc;
+                CommandHistoryManager::saveCommand(oss.str());
             }
             break;
         }
+
         case 4: {
             for (size_t i = 0; i < accounts.size(); i++) {
                 cout << "[" << i << "] ";
@@ -241,8 +278,14 @@ do {
             char sep1, sep2;
             cin >> y >> sep1 >> m >> sep2 >> d;
             date = Date(y, m, d);
+
+            // ✅ 保存命令（格式为c d）
+            ostringstream oss;
+            oss << "c " << d;
+            CommandHistoryManager::saveCommand(oss.str());
             break;
         }
+
         case 6: {
             if (date.Get_month() == 12)
                 date = Date(date.Get_year() + 1, 1, 1);
@@ -252,33 +295,39 @@ do {
             for (auto& account : accounts) {
                 account->settle(date);
             }
+
+            // ✅ 保存命令
+            CommandHistoryManager::saveCommand("n");
             break;
         }
-        case 7: {
-            cout << "1. Sort by date\n2. Sort by amount\nChoose: ";
-            int sortChoice;
-            cin >> sortChoice;
-            cin.ignore();
-            
-            cout << "Enter month (yyyy/mm): ";
-            int y, m;
-            char sep;
-            cin >> y >> sep >> m;
-            
-            Date monthStart(y, m, 1);
-            vector<AccountRecord> records;
-            
-            if (sortChoice == 1) {
-                records = Account::queryByDate(monthStart);
-            } else {
-                records = Account::queryByAmount(monthStart);
-            }
-            
-            for (const auto& record : records) {
-                record.show();
-            }
-            break;
+
+case 7: {  // 查看交易历史
+    cout << "1. Sort by date\n2. Sort by amount\nChoose: ";
+    int sortChoice;
+    cin >> sortChoice;
+    cin.ignore();  // 清除输入缓冲区
+
+    cout << "Enter month (yyyy/mm): ";
+    int year, month;
+    char sep;
+    cin >> year >> sep >> month;  // 获取年月
+    cin.ignore();  // 清除输入缓冲区
+
+    auto records = Account::queryByMonth(year, month);  // 获取该月的所有交易记录
+
+    if (records.empty()) {
+        cout << "No transactions found for " << year << "/" << month << endl;
+    } else {
+        for (const auto& record : records) {
+            record.show();  // 显示每条记录
         }
+    }
+
+    cout << "Press Enter to continue...";
+    cin.ignore();
+    break;
+}
+
         case 8: {
             for (size_t i = 0; i < accounts.size(); i++) {
                 auto stats = accounts[i]->getMonthlyStats(date);
@@ -293,7 +342,7 @@ do {
             return;
         }
         default:
-            cout << "Invalid choice" << endl;
+            cout << "Invalid choice (1-9 only)\n" << endl;
     }
 } while (choice != 9);
 }
